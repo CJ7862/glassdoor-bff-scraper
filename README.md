@@ -1,5 +1,10 @@
 # Glassdoor Jobs Scraper
 
+[![CI](https://github.com/CJ7862/glassdoor-bff-scraper/actions/workflows/ci.yml/badge.svg)](https://github.com/CJ7862/glassdoor-bff-scraper/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 Scrapes Glassdoor job listings by calling Glassdoor's **internal BFF JSON API**
 directly, bypassing Cloudflare with TLS-fingerprint impersonation (`curl_cffi`)
 instead of a browser. Ships as two things:
