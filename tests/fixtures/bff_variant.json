@@ -1,0 +1,43 @@
+{
+  "jobListings": {
+    "jobListings": [
+      {
+        "header": {
+          "jobTitleText": "Junior Data Analyst",
+          "employerNameFromSearch": "StartupCo",
+          "locationName": "Austin, TX",
+          "payCurrency": "USD",
+          "payPeriodAdjustedPay": {"p10": 55, "p90": 65},
+          "ageInDays": 1,
+          "easyApply": true,
+          "seoJobLink": "https://www.glassdoor.com/job-listing/junior-data-analyst-startupco.htm?jl=3000000000001",
+          "jobId": "3000000000001",
+          "employer": {"name": "StartupCo", "ratings": {"overallRating": 0}}
+        },
+        "job": {
+          "listingId": "3000000000001",
+          "descriptionFragmentsText": ["SQL and spreadsheets."]
+        }
+      },
+      {
+        "header": {
+          "jobTitleText": "Staff Data Engineer",
+          "employerNameFromSearch": "Enterprise Inc",
+          "locationName": "Remote",
+          "payCurrency": "USD",
+          "payPeriodAdjustedPay": {"p10": 90000, "p90": 130000},
+          "ageInDays": 10,
+          "easyApply": false,
+          "seoJobLink": "https://www.glassdoor.com/job-listing/staff-data-engineer-enterprise.htm?jl=3000000000002",
+          "jobId": "3000000000002",
+          "employer": {"name": "Enterprise Inc", "ratings": {"overallRating": 4.5}}
+        },
+        "job": {
+          "listingId": "3000000000002",
+          "descriptionFragmentsText": []
+        }
+      }
+    ],
+    "paginationCursors": []
+  }
+}

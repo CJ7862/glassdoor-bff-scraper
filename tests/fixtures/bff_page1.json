@@ -1,0 +1,121 @@
+{
+  "data": {
+    "jobListings": {
+      "jobListings": [
+        {
+          "jobview": {
+            "header": {
+              "jobTitleText": "Data Engineer",
+              "employerNameFromSearch": "DCI Solutions",
+              "locationName": "New York, NY",
+              "payPeriod": "ANNUAL",
+              "payCurrency": "USD",
+              "payPeriodAdjustedPay": {"p10": 175000, "p90": 260000},
+              "ageInDays": 5,
+              "easyApply": true,
+              "seoJobLink": "https://www.glassdoor.com/job-listing/data-engineer-dci-solutions-JV_IC1132348.htm?jl=1010179702382",
+              "jobId": "1010179702382",
+              "employer": {"name": "DCI Solutions", "ratings": {"overallRating": 3.9}}
+            },
+            "job": {
+              "listingId": "1010179702382",
+              "descriptionFragmentsText": [
+                "BS in Computer Science / Engineering preferred.",
+                "Data engineering: 5 years (Preferred)."
+              ]
+            }
+          }
+        },
+        {
+          "jobview": {
+            "header": {
+              "jobTitleText": "Data Engineer - 6370645",
+              "employerNameFromSearch": "Accenture",
+              "locationName": "New York, NY",
+              "payPeriod": "HOURLY",
+              "payCurrency": "USD",
+              "payPeriodAdjustedPay": {"p10": 44, "p90": 54},
+              "ageInDays": 7,
+              "easyApply": false,
+              "seoJobLink": "https://www.glassdoor.com/job-listing/data-engineer-6370645-accenture-JV_IC1132348.htm?jl=1010191916488",
+              "jobId": "1010191916488",
+              "employer": {"name": "Accenture", "ratings": {"overallRating": 3.7}}
+            },
+            "job": {
+              "listingId": "1010191916488",
+              "descriptionFragmentsText": [
+                "Contribute to continuous improvement of data engineering processes."
+              ]
+            }
+          }
+        },
+        {
+          "jobview": {
+            "header": {
+              "jobTitleText": "Lead Data Engineer",
+              "employerNameFromSearch": "Big Corp",
+              "locationName": "San Francisco, CA",
+              "payCurrency": "USD",
+              "payPeriodAdjustedPay": {"p10": 150000, "p90": 220000},
+              "ageInDays": 2,
+              "easyApply": false,
+              "seoJobLink": "https://www.glassdoor.com/job-listing/lead-data-engineer-big-corp.htm?jl=2000000000001",
+              "jobId": "2000000000001",
+              "employer": {"name": "Big Corp", "ratings": {"overallRating": 4.1}}
+            },
+            "job": {
+              "listingId": "2000000000001",
+              "descriptionFragments": ["Own the data platform roadmap."]
+            }
+          }
+        },
+        {
+          "jobview": {
+            "header": {
+              "jobTitleText": "Contract Data Technician",
+              "employerNameFromSearch": "Tandym Group",
+              "locationName": "New York, NY",
+              "payCurrency": "USD",
+              "payPeriodAdjustedPay": {"p10": 75, "p90": 75},
+              "ageInDays": 3,
+              "easyApply": true,
+              "seoJobLink": "https://www.glassdoor.com/job-listing/contract-data-technician-tandym.htm?jl=2000000000002",
+              "jobId": "2000000000002",
+              "employer": {"name": "Tandym Group", "ratings": {"overallRating": 3.0}}
+            },
+            "job": {
+              "listingId": "2000000000002",
+              "descriptionFragmentsText": ["Node.js and TypeScript in production."]
+            }
+          }
+        },
+        {
+          "jobview": {
+            "header": {
+              "jobTitleText": "Data Engineer (duplicate listing)",
+              "employerNameFromSearch": "DCI Solutions",
+              "locationName": "New York, NY",
+              "payPeriod": "ANNUAL",
+              "payCurrency": "USD",
+              "payPeriodAdjustedPay": {"p10": 175000, "p90": 260000},
+              "ageInDays": 5,
+              "easyApply": true,
+              "seoJobLink": "https://www.glassdoor.com/job-listing/data-engineer-dci-solutions-JV_IC1132348.htm?jl=1010179702382",
+              "jobId": "1010179702382",
+              "employer": {"name": "DCI Solutions", "ratings": {"overallRating": 3.9}}
+            },
+            "job": {
+              "listingId": "1010179702382",
+              "descriptionFragmentsText": ["Duplicate of the first listing."]
+            }
+          }
+        }
+      ],
+      "paginationCursors": [
+        {"pageNumber": 1, "cursor": "cursor_page_1"},
+        {"pageNumber": 2, "cursor": "cursor_page_2"},
+        {"pageNumber": 3, "cursor": "cursor_page_3"}
+      ]
+    }
+  }
+}

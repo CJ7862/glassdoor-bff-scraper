@@ -1,0 +1,48 @@
+[project]
+name = "glassdoor-scraper"
+version = "1.0.0"
+description = "Hardened Glassdoor jobs scraper with a FastAPI job-queue service."
+requires-python = ">=3.11"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["scraping", "glassdoor", "curl-cffi", "fastapi", "educational"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B", "UP", "C4"]
+# E501 (line length) is enforced by the formatter's judgment, not the linter here:
+# several argparse help strings and log messages are intentionally long.
+ignore = ["E501"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's dependency-injection markers are called in argument defaults by design.
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Path", "fastapi.Header"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests use fixtures and assertions that trip a few checks harmlessly.
+"tests/*" = ["B011"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+check_untyped_defs = true
+ignore_missing_imports = false
+disallow_incomplete_defs = false
+
+[[tool.mypy.overrides]]
+# curl_cffi ships no type information.
+module = ["curl_cffi.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]

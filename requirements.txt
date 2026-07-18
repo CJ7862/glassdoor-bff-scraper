@@ -1,0 +1,28 @@
+# Full dependency set (runtime + development/CI tooling), pinned to the versions
+# that actually resolved with pip on Python 3.14. Installing this file gives you
+# everything needed to run the CLI, the API, the tests, and the linters.
+#
+# For a slim production image, install requirements-runtime.txt instead (the
+# Dockerfile does exactly that).
+#
+# Note on API-key hashing: keys are high-entropy random tokens hashed with the
+# stdlib's SHA-256 (see api/security.py for the rationale), so no argon2 dependency
+# is required -- SHA-256 is the "or equivalent" allowed by the design.
+
+# ---- Runtime ----
+curl_cffi==0.15.0
+fastapi==0.139.0
+uvicorn[standard]==0.51.0
+pydantic==2.13.4
+pydantic-settings==2.14.2
+python-dotenv==1.2.2
+rich==15.0.0
+prometheus-client==0.25.0
+httpx==0.28.1
+
+# ---- Development / CI ----
+pytest==9.1.1
+pytest-asyncio==1.4.0
+ruff==0.15.21
+mypy==2.3.0
+pip-audit==2.10.1

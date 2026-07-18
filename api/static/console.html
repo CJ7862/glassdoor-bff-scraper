@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Glassdoor Scraper - Test Console</title>
+<style>
+  :root {
+    --bg: #0f1420;
+    --panel: #182031;
+    --panel-2: #1f2940;
+    --border: #2b3853;
+    --text: #e6ebf5;
+    --muted: #9aa7c2;
+    --accent: #4f8cff;
+    --accent-2: #2f6fe0;
+    --ok: #3ecf8e;
+    --warn: #f5b74f;
+    --err: #ff6b6b;
+    --chip: #223052;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 24px;
+    background: linear-gradient(90deg, #182031, #1c2740);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  header h1 { font-size: 18px; margin: 0; font-weight: 650; }
+  header .sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .health-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--chip); border: 1px solid var(--border);
+    padding: 6px 12px; border-radius: 999px; font-size: 13px;
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+  .dot.ok { background: var(--ok); }
+  .dot.err { background: var(--err); }
+  .dot.warn { background: var(--warn); }
+  main {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 20px;
+    padding: 20px 24px;
+    align-items: start;
+  }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .panel h2 {
+    font-size: 14px; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--muted); margin: 0 0 14px;
+  }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 12px 0 4px; }
+  input, select {
+    width: 100%; padding: 9px 10px; font-size: 14px;
+    background: var(--panel-2); color: var(--text);
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  .row { display: flex; gap: 10px; }
+  .row > div { flex: 1; }
+  .checks { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+  .checks label { display: inline-flex; align-items: center; gap: 6px; margin: 0; color: var(--text); }
+  .checks input { width: auto; }
+  button {
+    cursor: pointer; border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 600; padding: 10px 16px;
+    background: var(--accent); color: #fff; transition: background .15s;
+  }
+  button:hover { background: var(--accent-2); }
+  button.secondary { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+  button.secondary:hover { background: var(--chip); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  .actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .status-line {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 14px; font-size: 14px;
+  }
+  .badge {
+    padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .03em;
+  }
+  .badge.queued { background: #33406a; color: #cdd8f5; }
+  .badge.running { background: #3a4a1f; color: #d6f59a; }
+  .badge.done { background: #16402f; color: var(--ok); }
+  .badge.failed { background: #4a1f22; color: var(--err); }
+  .progress { height: 8px; background: var(--panel-2); border-radius: 999px; overflow: hidden; margin: 6px 0 2px; }
+  .progress > div { height: 100%; width: 0%; background: var(--accent); transition: width .3s; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; position: sticky; top: 0; background: var(--panel); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .table-wrap { max-height: 520px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
+  a { color: var(--accent); }
+  .pager { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+  .toast {
+    padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 14px;
+    display: none; white-space: pre-wrap; word-break: break-word;
+  }
+  .toast.show { display: block; }
+  .toast.error { background: #3a1e22; border: 1px solid #6b2f36; color: #ffc9cd; }
+  .toast.ok { background: #12362a; border: 1px solid #1f6b4f; color: #b6f2d6; }
+  .toast.info { background: #1d2c4a; border: 1px solid #35507f; color: #cfe0ff; }
+  .kv { font-size: 13px; color: var(--muted); }
+  .kv b { color: var(--text); font-weight: 600; }
+  .empty { color: var(--muted); font-size: 14px; padding: 20px; text-align: center; }
+  code { background: var(--panel-2); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  .pay { font-size: 11px; color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Glassdoor Scraper - Test Console</h1>
+    <div class="sub">Submit a search, watch it run, browse and export results.</div>
+  </div>
+  <div class="health-pill">
+    <span class="dot" id="healthDot"></span>
+    <span id="healthText">checking service...</span>
+  </div>
+</header>
+
+<main>
+  <section class="panel" id="formPanel">
+    <h2>New search</h2>
+
+    <label for="apiBase">API base URL</label>
+    <input id="apiBase" placeholder="(same origin)" />
+    <div class="hint">Leave blank to use this page's origin.</div>
+
+    <label for="apiKey">API key</label>
+    <input id="apiKey" type="password" placeholder="X-API-Key value" autocomplete="off" />
+    <div class="hint" id="keyHint">Stored only in this browser (localStorage).</div>
+
+    <label for="keyword">Keyword <span style="color:var(--err)">*</span></label>
+    <input id="keyword" value="data engineer" />
+
+    <div class="row">
+      <div>
+        <label for="city">City</label>
+        <input id="city" value="New York" />
+      </div>
+      <div>
+        <label for="locationId">or Location ID</label>
+        <input id="locationId" type="number" min="1" placeholder="e.g. 1132348" />
+      </div>
+    </div>
+    <div class="hint">Provide a city OR a location ID (not both needed).</div>
+
+    <div class="row">
+      <div>
+        <label for="site">Site</label>
+        <select id="site"></select>
+      </div>
+      <div>
+        <label for="country">Country</label>
+        <input id="country" value="us" maxlength="2" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="pages">Pages</label>
+        <input id="pages" type="number" min="1" value="1" />
+      </div>
+      <div>
+        <label for="sort">Sort</label>
+        <select id="sort"></select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="workType">Work type</label>
+        <select id="workType"></select>
+      </div>
+      <div>
+        <label for="rating">Min rating</label>
+        <select id="rating"></select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="minSalary">Min salary</label>
+        <input id="minSalary" type="number" min="0" placeholder="any" />
+      </div>
+      <div>
+        <label for="maxSalary">Max salary</label>
+        <input id="maxSalary" type="number" min="0" placeholder="any" />
+      </div>
+    </div>
+
+    <label for="posted">Date posted</label>
+    <select id="posted"></select>
+
+    <div class="checks">
+      <label><input type="checkbox" id="easyApply" /> Easy apply only</label>
+    </div>
+
+    <div class="actions">
+      <button id="submitBtn">Submit search</button>
+      <button class="secondary" id="healthBtn">Refresh health</button>
+    </div>
+    <div class="hint" id="pagesHint"></div>
+  </section>
+
+  <section class="panel" id="resultPanel">
+    <h2>Result</h2>
+    <div class="toast" id="toast"></div>
+
+    <div id="jobArea" style="display:none">
+      <div class="status-line">
+        <span class="badge" id="statusBadge">queued</span>
+        <span class="kv">Job <b id="jobId">-</b></span>
+        <span class="kv" id="idemFlag"></span>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div class="kv" id="progressText">Pages fetched: 0 / 0 &nbsp;|&nbsp; Jobs collected: 0</div>
+      <div class="kv" id="errText" style="color:var(--err); margin-top:8px;"></div>
+
+      <div class="actions" id="resultActions" style="display:none">
+        <button class="secondary" id="csvBtn">Download CSV</button>
+        <button class="secondary" id="jsonBtn">Download JSON</button>
+      </div>
+
+      <div id="tableArea" style="margin-top:16px;"></div>
+      <div class="pager" id="pager" style="display:none">
+        <button class="secondary" id="prevBtn">Prev</button>
+        <span class="kv" id="pageInfo"></span>
+        <button class="secondary" id="nextBtn">Next</button>
+      </div>
+    </div>
+
+    <div class="empty" id="emptyState">No search submitted yet. Fill the form and click Submit.</div>
+  </section>
+</main>
+
+<script>
+"use strict";
+
+const $ = (id) => document.getElementById(id);
+const store = window.localStorage;
+
+const state = {
+  meta: null,
+  jobId: null,
+  poll: null,
+  page: 1,
+  pageSize: 50,
+  total: 0,
+  fields: [],
+};
+
+function apiBase() {
+  const v = $("apiBase").value.trim().replace(/\/+$/, "");
+  return v;
+}
+
+function headers(extra) {
+  const h = Object.assign({ "Content-Type": "application/json" }, extra || {});
+  const key = $("apiKey").value.trim();
+  if (key) h["X-API-Key"] = key;
+  return h;
+}
+
+async function api(path, opts) {
+  const res = await fetch(apiBase() + path, opts || {});
+  let body = null;
+  const ct = res.headers.get("content-type") || "";
+  if (ct.includes("application/json")) {
+    body = await res.json();
+  } else {
+    body = await res.text();
+  }
+  return { ok: res.ok, status: res.status, body };
+}
+
+function toast(msg, kind) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.className = "toast show " + (kind || "info");
+}
+function clearToast() { $("toast").className = "toast"; }
+
+function errorMessage(status, body) {
+  if (body && typeof body === "object" && body.detail) {
+    if (Array.isArray(body.detail)) {
+      return body.detail.map((d) => {
+        const loc = Array.isArray(d.loc) ? d.loc.filter((x) => x !== "body").join(".") : "";
+        return (loc ? loc + ": " : "") + d.msg;
+      }).join("\n");
+    }
+    return String(body.detail);
+  }
+  if (typeof body === "string" && body) return body;
+  return "HTTP " + status;
+}
+
+// ---- health ---------------------------------------------------------------
+async function refreshHealth() {
+  const dot = $("healthDot");
+  const text = $("healthText");
+  try {
+    const r = await api("/healthz");
+    if (r.ok) {
+      const q = r.body.queue || {};
+      dot.className = "dot ok";
+      const br = r.body.proxy_health ? Math.round((r.body.proxy_health.rolling_block_rate || 0) * 100) : 0;
+      text.textContent = `service ok - queued ${q.queued||0}, running ${q.running||0}, done ${q.done||0}, failed ${q.failed||0} (block rate ${br}%)`;
+      if (br >= 50) dot.className = "dot warn";
+    } else {
+      dot.className = "dot err";
+      text.textContent = "service error (HTTP " + r.status + ")";
+    }
+  } catch (e) {
+    dot.className = "dot err";
+    text.textContent = "cannot reach service";
+  }
+}
+
+// ---- meta / form population ----------------------------------------------
+function fillSelect(id, values, selected) {
+  const el = $(id);
+  el.innerHTML = "";
+  values.forEach((v) => {
+    const o = document.createElement("option");
+    o.value = v; o.textContent = v;
+    if (v === selected) o.selected = true;
+    el.appendChild(o);
+  });
+}
+
+async function loadMeta() {
+  try {
+    const r = await api("/v1/meta");
+    if (!r.ok) throw new Error("meta " + r.status);
+    state.meta = r.body;
+    state.fields = r.body.job_fields || [];
+    state.pageSize = r.body.results_page_size || 50;
+    fillSelect("site", r.body.sites, "com");
+    fillSelect("sort", r.body.sorts, "relevant");
+    fillSelect("rating", r.body.ratings, "any");
+    fillSelect("posted", r.body.posted, "any");
+    fillSelect("workType", ["(any)"].concat(r.body.work_types), "(any)");
+    $("pages").max = r.body.max_pages_per_request;
+    $("pagesHint").textContent = "Maximum " + r.body.max_pages_per_request + " pages per request.";
+    if (!r.body.require_api_key) {
+      $("keyHint").textContent = "Auth is disabled on this server; the key is optional.";
+    }
+  } catch (e) {
+    toast("Could not load form options from /v1/meta: " + e.message, "error");
+  }
+}
+
+// ---- submit ---------------------------------------------------------------
+function buildBody() {
+  const body = {
+    keyword: $("keyword").value.trim(),
+    site: $("site").value,
+    country: $("country").value.trim() || "us",
+    pages: parseInt($("pages").value, 10) || 1,
+    sort: $("sort").value,
+    rating: $("rating").value,
+    posted: $("posted").value,
+    easy_apply: $("easyApply").checked,
+  };
+  const city = $("city").value.trim();
+  const locId = $("locationId").value.trim();
+  if (locId) body.location_id = parseInt(locId, 10);
+  else if (city) body.city = city;
+  const wt = $("workType").value;
+  if (wt && wt !== "(any)") body.work_type = wt;
+  const minS = $("minSalary").value.trim();
+  const maxS = $("maxSalary").value.trim();
+  if (minS) body.min_salary = parseInt(minS, 10);
+  if (maxS) body.max_salary = parseInt(maxS, 10);
+  return body;
+}
+
+async function submitSearch() {
+  clearToast();
+  const body = buildBody();
+  if (!body.keyword) { toast("Keyword is required.", "error"); return; }
+  if (!body.city && !body.location_id) { toast("Provide a city or a location ID.", "error"); return; }
+
+  $("submitBtn").disabled = true;
+  try {
+    const r = await api("/v1/searches", { method: "POST", headers: headers(), body: JSON.stringify(body) });
+    if (!r.ok) { toast("Submit failed:\n" + errorMessage(r.status, r.body), "error"); return; }
+    state.jobId = r.body.job_id;
+    state.page = 1;
+    $("emptyState").style.display = "none";
+    $("jobArea").style.display = "block";
+    $("resultActions").style.display = "none";
+    $("tableArea").innerHTML = "";
+    $("pager").style.display = "none";
+    $("errText").textContent = "";
+    $("jobId").textContent = r.body.job_id;
+    $("idemFlag").textContent = r.body.idempotent ? "(idempotent hit - existing job)" : "";
+    toast("Search accepted. Polling status...", "ok");
+    startPolling();
+  } catch (e) {
+    toast("Request error: " + e.message, "error");
+  } finally {
+    $("submitBtn").disabled = false;
+  }
+}
+
+// ---- polling --------------------------------------------------------------
+function setBadge(status) {
+  const b = $("statusBadge");
+  b.textContent = status;
+  b.className = "badge " + status;
+}
+
+function startPolling() {
+  if (state.poll) clearInterval(state.poll);
+  pollOnce();
+  state.poll = setInterval(pollOnce, 2000);
+}
+
+async function pollOnce() {
+  if (!state.jobId) return;
+  const r = await api("/v1/searches/" + state.jobId, { headers: headers() });
+  if (!r.ok) {
+    toast("Status check failed:\n" + errorMessage(r.status, r.body), "error");
+    clearInterval(state.poll);
+    return;
+  }
+  const j = r.body;
+  setBadge(j.status);
+  const p = j.progress || {};
+  const pct = p.pages_requested ? Math.round((p.pages_done / p.pages_requested) * 100) : 0;
+  $("progressBar").style.width = pct + "%";
+  $("progressText").innerHTML =
+    `Pages fetched: <b>${p.pages_done||0} / ${p.pages_requested||0}</b> &nbsp;|&nbsp; ` +
+    `Jobs collected: <b>${p.jobs_collected||0}</b> &nbsp;|&nbsp; Attempts: ${j.attempts||0}/${j.max_attempts||0}`;
+
+  if (j.status === "done") {
+    clearInterval(state.poll);
+    clearToast();
+    $("resultActions").style.display = "flex";
+    loadResults();
+    refreshHealth();
+  } else if (j.status === "failed") {
+    clearInterval(state.poll);
+    $("errText").textContent = "Failed: " + (j.error || "unknown error");
+    toast("Job failed after " + (j.attempts||0) + " attempt(s).", "error");
+    refreshHealth();
+  }
+}
+
+// ---- results --------------------------------------------------------------
+async function loadResults() {
+  const r = await api(`/v1/searches/${state.jobId}/results?page=${state.page}&page_size=${state.pageSize}`,
+    { headers: headers() });
+  if (!r.ok) { toast("Results fetch failed:\n" + errorMessage(r.status, r.body), "error"); return; }
+  state.total = r.body.total;
+  renderTable(r.body.results);
+  renderPager();
+}
+
+function renderTable(rows) {
+  if (!rows || !rows.length) {
+    $("tableArea").innerHTML = '<div class="empty">No job rows on this page.</div>';
+    return;
+  }
+  const cols = state.fields.length ? state.fields : Object.keys(rows[0]);
+  const numeric = new Set(["salary_min", "salary_max", "company_rating"]);
+  let html = '<div class="table-wrap"><table><thead><tr>';
+  cols.forEach((c) => { html += "<th>" + c + "</th>"; });
+  html += "</tr></thead><tbody>";
+  rows.forEach((row) => {
+    html += "<tr>";
+    cols.forEach((c) => {
+      let v = row[c];
+      if (c === "job_url" && v) {
+        html += `<td><a href="${escapeAttr(v)}" target="_blank" rel="noopener">open</a></td>`;
+      } else if (c === "salary_min" || c === "salary_max") {
+        const period = row.pay_period ? `<span class="pay"> ${escapeHtml(row.pay_period)}</span>` : "";
+        html += `<td class="num">${v !== undefined && v !== "" ? escapeHtml(String(v)) : "-"}${c === "salary_max" ? period : ""}</td>`;
+      } else if (numeric.has(c)) {
+        html += `<td class="num">${v !== undefined && v !== "" ? escapeHtml(String(v)) : "-"}</td>`;
+      } else if (typeof v === "boolean") {
+        html += `<td>${v ? "yes" : "no"}</td>`;
+      } else {
+        html += `<td>${v !== undefined && v !== null && v !== "" ? escapeHtml(String(v)) : "-"}</td>`;
+      }
+    });
+    html += "</tr>";
+  });
+  html += "</tbody></table></div>";
+  $("tableArea").innerHTML = html;
+}
+
+function renderPager() {
+  const pages = Math.max(1, Math.ceil(state.total / state.pageSize));
+  $("pager").style.display = state.total > state.pageSize ? "flex" : "flex";
+  $("pageInfo").textContent = `Page ${state.page} of ${pages} - ${state.total} job(s) total`;
+  $("prevBtn").disabled = state.page <= 1;
+  $("nextBtn").disabled = state.page >= pages;
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+// ---- export (fetch with auth header, then download the blob) --------------
+async function downloadExport(format) {
+  if (!state.jobId) return;
+  try {
+    const res = await fetch(apiBase() + `/v1/searches/${state.jobId}/export?format=${format}`,
+      { headers: headers() });
+    if (!res.ok) {
+      let msg = "HTTP " + res.status;
+      try { const b = await res.json(); msg = errorMessage(res.status, b); } catch (e) {}
+      toast("Export failed:\n" + msg, "error");
+      return;
+    }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `glassdoor_${state.jobId}.${format}`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast(`Downloaded ${format.toUpperCase()} export.`, "ok");
+  } catch (e) {
+    toast("Export error: " + e.message, "error");
+  }
+}
+
+// ---- wiring ---------------------------------------------------------------
+function persist() {
+  store.setItem("gd_api_base", $("apiBase").value);
+  store.setItem("gd_api_key", $("apiKey").value);
+}
+
+function restore() {
+  $("apiBase").value = store.getItem("gd_api_base") || "";
+  $("apiKey").value = store.getItem("gd_api_key") || "";
+}
+
+$("submitBtn").addEventListener("click", submitSearch);
+$("healthBtn").addEventListener("click", refreshHealth);
+$("csvBtn").addEventListener("click", () => downloadExport("csv"));
+$("jsonBtn").addEventListener("click", () => downloadExport("json"));
+$("prevBtn").addEventListener("click", () => { if (state.page > 1) { state.page--; loadResults(); } });
+$("nextBtn").addEventListener("click", () => { state.page++; loadResults(); });
+["apiBase", "apiKey"].forEach((id) => $(id).addEventListener("change", persist));
+
+(async function init() {
+  restore();
+  await loadMeta();
+  await refreshHealth();
+})();
+</script>
+</body>
+</html>

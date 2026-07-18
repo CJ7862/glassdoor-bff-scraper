@@ -1,0 +1,21 @@
+# Runtime dependencies only (used by the Docker image). Pinned to the versions
+# that actually resolved with pip on Python 3.14; bump deliberately.
+
+# TLS/HTTP2 fingerprint impersonation to bypass Cloudflare without a browser.
+curl_cffi==0.15.0
+
+# API service.
+fastapi==0.139.0
+uvicorn[standard]==0.51.0
+pydantic==2.13.4
+pydantic-settings==2.14.2
+python-dotenv==1.2.2
+
+# Human-friendly CLI output.
+rich==15.0.0
+
+# Observability.
+prometheus-client==0.25.0
+
+# Outbound webhooks (and used by the test client).
+httpx==0.28.1

@@ -1,0 +1,23 @@
+services:
+  api:
+    build: .
+    image: glassdoor-scraper:latest
+    restart: unless-stopped
+    ports:
+      - "${GLASSDOOR_API_PORT:-8000}:8000"
+    environment:
+      # SQLite lives on the mounted volume so data survives container restarts.
+      GLASSDOOR_DB_PATH: /data/glassdoor_scraper.db
+      GLASSDOOR_API_HOST: 0.0.0.0
+      GLASSDOOR_API_PORT: 8000
+    # Proxy creds, webhook secret, quotas, fingerprint overrides, etc. come from
+    # a local .env file (copy .env.example). Never bake secrets into the image.
+    env_file:
+      - .env
+    volumes:
+      - glassdoor_data:/data
+    # Give in-flight jobs time to checkpoint/requeue on SIGTERM before SIGKILL.
+    stop_grace_period: 40s
+
+volumes:
+  glassdoor_data:

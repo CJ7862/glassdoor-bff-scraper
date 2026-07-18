@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# CLI outputs
+glassdoor_jobs.csv
+glassdoor_jobs.json
+results.csv
+results.json
+test_run.csv
+test_run.json
+*.runstate.json
+
+# SQLite database (queue + transient results + seen_jobs + api_keys)
+*.db
+*.db-wal
+*.db-shm
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
