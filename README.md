@@ -1,9 +1,20 @@
-# Glassdoor Jobs Scraper
+<p align="center">
+  <img src="assets/banner.png" alt="glassdoor-bff-scraper" width="100%" />
+</p>
 
-[![CI](https://github.com/CJ7862/glassdoor-bff-scraper/actions/workflows/ci.yml/badge.svg)](https://github.com/CJ7862/glassdoor-bff-scraper/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+<h1 align="center">Glassdoor BFF Scraper</h1>
+
+<p align="center">
+  <em>Browser-free, block-resistant Glassdoor job scraping via the internal BFF API — with a hardened CLI and a FastAPI job-queue service.</em>
+</p>
+
+<p align="center">
+  <a href="https://github.com/CJ7862/glassdoor-bff-scraper/actions/workflows/ci.yml"><img src="https://github.com/CJ7862/glassdoor-bff-scraper/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python 3.11+" /></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff" /></a>
+  <img src="https://img.shields.io/badge/status-educational%20%7C%20unmaintained-lightgrey.svg" alt="Educational / unmaintained" />
+</p>
 
 Scrapes Glassdoor job listings by calling Glassdoor's **internal BFF JSON API**
 directly, bypassing Cloudflare with TLS-fingerprint impersonation (`curl_cffi`)
@@ -381,3 +392,47 @@ depth; check logs for worker errors. Restart is safe — running jobs are requeu
 **Symptom: proxy pool degrading.** Watch `glassdoor_proxy_requests_total{outcome=…}`,
 `glassdoor_rolling_block_rate`, and `glassdoor_proxy_bytes_total` in `/metrics`, plus
 the `proxy_health` block in `/healthz`.
+
+---
+
+## Branding
+
+<p align="center">
+  <img src="assets/logo.png" alt="glassdoor-bff-scraper logo" width="180" />
+</p>
+
+The name, logo, and visual identity for this project.
+
+**Name.** `glassdoor-bff-scraper` (lowercase, hyphenated) in code and URLs; "Glassdoor
+BFF Scraper" in prose. "BFF" refers to the Backend-for-Frontend API the project calls —
+the defining technique — not the target site.
+
+**Logo mark.** A glass panel with job-listing rows flowing through it and a downward
+extraction arrow: "structured data pulled cleanly through the glass." Assets live in
+[`assets/`](assets/):
+
+| Asset | File | Use |
+|---|---|---|
+| Icon / avatar | [`assets/logo.png`](assets/logo.png) | Repo avatar, favicons, square placements |
+| Hero / social preview | [`assets/banner.png`](assets/banner.png) | README header, GitHub social preview |
+
+**Color palette.**
+
+| Role | Hex |
+|---|---|
+| Background (navy) | `#0f1420` |
+| Primary (blue) | `#4f8cff` |
+| Accent (teal) | `#3ecf8e` |
+| Warning | `#f5b74f` |
+| Error | `#ff6b6b` |
+
+The same palette drives the browser test console (`api/static/console.html`), so the CLI,
+the UI, and the brand share one look.
+
+**Usage.** The code is MIT-licensed; these brand assets are provided for referring to
+*this* project (READMEs, articles, talks). Please don't use the name or logo to imply
+endorsement by, or affiliation with, Glassdoor — there is none. This is an independent,
+educational project.
+
+> **Tip:** to set the GitHub social preview image, go to the repo's
+> **Settings → General → Social preview** and upload `assets/banner.png`.
